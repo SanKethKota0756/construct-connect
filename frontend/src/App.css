@@ -1,0 +1,176 @@
+/* src/App.css (COMPLETE AND FINAL VERSION) */
+
+:root {
+  --brand-orange: #E9572E;
+  --brand-orange-hover: #D04A24;
+  --brand-off-white: #FAF8F5;
+  --brand-text: #343a40;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/* --- BUTTONS --- */
+.btn-orange {
+  background-color: var(--brand-orange);
+  border-color: var(--brand-orange);
+  color: white;
+}
+
+.btn-orange:hover {
+  background-color: var(--brand-orange-hover);
+  border-color: var(--brand-orange-hover);
+  color: white;
+}
+
+.btn-outline-orange {
+  color: var(--brand-orange);
+  border-color: var(--brand-orange);
+}
+
+.btn-outline-orange:hover {
+  background-color: var(--brand-orange);
+  color: white;
+}
+
+/* --- HERO SECTION --- */
+.hero-section {
+  background-color: var(--brand-off-white);
+}
+
+.hero-title {
+  color: var(--brand-text);
+}
+
+.hero-title .highlight {
+  color: var(--brand-orange);
+}
+
+/* --- LISTING CARD --- */
+.listing-card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.listing-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.listing-card .card-img-top {
+  height: 200px;
+  object-fit: cover;
+}
+
+.badge-free {
+  background-color: #28a745;
+  color: white;
+  font-weight: bold;
+}
+
+/* --- VALUE PROPS --- */
+.value-prop-icon-wrapper {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.value-prop-icon-wrapper.bg-orange-light {
+  background-color: #FEECE8;
+}
+
+.value-prop-icon-wrapper.bg-blue-light {
+  background-color: #EBF4FF;
+}
+
+.value-prop-icon-wrapper.bg-green-light {
+  background-color: #E6F8F0;
+}
+
+/* --- HIGH-CLASS DARK FOOTER STYLES --- */
+.footer-dark {
+  background-color: #1C1C1E; /* A sophisticated, near-black charcoal */
+}
+
+.footer-dark .footer-links a {
+  color: #adb5bd; /* A light grey for links for better readability */
+  text-decoration: none;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.footer-dark .footer-links a:hover {
+  color: #ffffff; 
+}
+
+.footer-dark .social-icon {
+  text-decoration: none;
+}
+
+.footer-dark .social-icon:hover {
+  color: #ffffff !important;
+}
+
+/* --- LAYOUT FIXES --- */
+/* Fix for content being hidden by fixed header */
+.main-content {
+  padding-top: 90px; 
+}
+
+/* Fix to remove underline from link-wrapped buttons */
+.btn-link-wrapper,
+.btn-link-wrapper:hover {
+  text-decoration: none;
+}
+/* Add this to the bottom of src/App.css */
+
+/* --- SIGN UP PAGE STYLES --- */
+.signup-container {
+  min-height: calc(100vh - 90px); /* Full height minus the header */
+}
+
+.signup-image-panel {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200');
+  background-size: cover;
+  background-position: center;
+}
+
+.signup-form-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+/* Add this to the bottom of src/App.css */
+
+/* Make sample cards non-interactive on hover */
+.sample-card {
+  cursor: default; /* Change the cursor from a pointer to the default arrow */
+}
+.sample-card:hover {
+  transform: none; /* Disable the hover "lift" effect */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07); /* Reset to default shadow */
+}
+/* Add this to the bottom of src/App.css */
+
+/* --- STYLES FOR ATTRACTIVE SECTION HEADERS --- */
+.section-header {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  background-color: #ffffff; /* A clean white background */
+  border-top: 1px solid #e9ecef; /* Light top border */
+  border-bottom: 1px solid #e9ecef; /* Light bottom border */
+  margin-top: 2rem; /* Add some space above the section */
+}
+
+.section-header h2 {
+  font-size: 2.5rem; /* Make the heading larger */
+  font-weight: 700; /* Bolder text */
+}
+
+.section-header p {
+  font-size: 1.15rem; /* Slightly larger subheading */
+}
