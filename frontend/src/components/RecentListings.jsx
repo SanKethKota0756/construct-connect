@@ -1,8 +1,9 @@
-// frontend/src/components/RecentListings.jsx - REVERTED TO SIMPLER VERSION
+// frontend/src/components/RecentListings.jsx - CLEANED AND UPDATED
 
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Button, Spinner, Alert } from 'react-bootstrap';
-import axios from 'axios';
+// 'Button' has been removed from this import line
+import { Container, Row, Col, Spinner, Alert } from 'react-bootstrap';
+import API from '../api';
 import ListingCard from './ListingCard';
 
 const RecentListings = () => {
@@ -11,12 +12,10 @@ const RecentListings = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    // This component now only fetches the default list of all recent items
     const fetchListings = async () => {
       try {
         setLoading(true);
-        const { data } = await axios.get('/api/listings');
-        // We only want to show a few on the homepage, e.g., the first 6
+        const { data } = await API.get('/api/listings');
         setListings(data.slice(0, 6));
         setLoading(false);
       } catch (err) {
@@ -26,7 +25,7 @@ const RecentListings = () => {
     };
 
     fetchListings();
-  }, []); // Runs only once
+  }, []);
 
   if (loading) {
     return <div className="text-center py-5"><Spinner animation="border" /></div>;
@@ -35,7 +34,7 @@ const RecentListings = () => {
     return <Container className="py-5"><Alert variant="danger">{error}</Alert></Container>;
   }
   if (listings.length === 0) {
-    return null; // Don't show the section if there's nothing to show
+    return null;
   }
 
   return (
@@ -62,6 +61,7 @@ const RecentListings = () => {
             </Col>
           ))}
         </Row>
+        {/* The "View All" button was already removed, so no JSX changes are needed */}
       </Container>
     </div>
   );

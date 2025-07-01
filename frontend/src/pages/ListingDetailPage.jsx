@@ -1,16 +1,15 @@
-// frontend/src/pages/ListingDetailPage.jsx - COMPLETE AND FINAL VERSION
+// frontend/src/pages/ListingDetailPage.jsx - FULLY UPDATED FOR DEPLOYMENT
 
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { Container, Row, Col, Image, Card, Button, Badge, Spinner, Alert } from 'react-bootstrap';
 import { Envelope, Telephone, PersonCircle } from 'react-bootstrap-icons';
-import axios from 'axios';
+import API from '../api'; // 1. CHANGED: Import our new central API instance
 
 const ListingDetailPage = () => {
   const { id: listingId } = useParams();
   const navigate = useNavigate();
-
   const { userInfo } = useContext(AuthContext);
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,7 +20,8 @@ const ListingDetailPage = () => {
     const fetchListing = async () => {
       try {
         setLoading(true);
-        const { data } = await axios.get(`/api/listings/${listingId}`);
+        // 2. CHANGED: Use API.get
+        const { data } = await API.get(`/api/listings/${listingId}`);
         setListing(data);
         setLoading(false);
       } catch (err) {
@@ -79,7 +79,6 @@ const ListingDetailPage = () => {
               </div>
             </Col>
           </Row>
-
           {showContactInfo && (
             <Row className="mt-4">
               <Col md={{ span: 7 }}>
@@ -89,7 +88,6 @@ const ListingDetailPage = () => {
                     <p>
                       <PersonCircle className="me-2" /> 
                       <strong>Name:</strong> 
-                      {/* This is the updated, clickable link */}
                       <Link to={`/profile/${listing.user._id}`} className="ms-2">{listing.user.name}</Link>
                     </p>
                     <p><Envelope className="me-2" /> <strong>Email:</strong> <a href={`mailto:${listing.user.email}`}>{listing.user.email}</a></p>

@@ -1,14 +1,13 @@
-// frontend/src/pages/ProfilePage.jsx
+// frontend/src/pages/ProfilePage.jsx - FULLY UPDATED FOR DEPLOYMENT
 
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { Container, Form, Button, Row, Col, Alert, Spinner } from 'react-bootstrap';
-import axios from 'axios';
+import API from '../api'; // 1. CHANGED: Import our new central API instance
 
 const ProfilePage = () => {
-  const { userInfo, updateUser } = useContext(AuthContext); // Get updateUser from context
+  const { userInfo, updateUser } = useContext(AuthContext);
 
-  // State for form fields, pre-filled from context
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -16,12 +15,10 @@ const ProfilePage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   
-  // State for loading, errors, and success messages
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Pre-fill form when component loads or userInfo changes
   useEffect(() => {
     if (userInfo) {
       setName(userInfo.name);
@@ -43,23 +40,16 @@ const ProfilePage = () => {
 
     setLoading(true);
     try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-
-      const { data } = await axios.put(
+      // 2. CHANGED: Use API.put and remove the config object
+      const { data } = await API.put(
         '/api/users/profile',
-        { name, email, phone, zipCode, password },
-        config
+        { name, email, phone, zipCode, password }
       );
 
       // Update the global state and local storage with the new user info
       updateUser(data);
       setSuccess('Profile Updated Successfully!');
-      setPassword(''); // Clear password fields after update
+      setPassword(''); 
       setConfirmPassword('');
       setLoading(false);
       
@@ -74,9 +64,8 @@ const ProfilePage = () => {
       <Row className="justify-content-md-center">
         <Col xs={12} md={8} lg={6}>
           <h1 className="mb-4">User Profile</h1>
-          {error && <Alert variant="danger">{error}</Alert>}
-          {success && <Alert variant="success">{success}</Alert>}
-          {loading && <div className="text-center"><Spinner animation="border" /></div>}
+          {error && <Alert variant="danger" onClose={() => setError('')} dismissible>{error}</Alert>}
+          {success && <Alert variant="success" onClose={() => setSuccess('')} dismissible>{success}</Alert>}
           
           <Form onSubmit={submitHandler}>
             <Form.Group className="mb-3" controlId="name">
@@ -105,8 +94,8 @@ const ProfilePage = () => {
               <Form.Label>Confirm New Password</Form.Label>
               <Form.Control type="password" placeholder="Confirm new password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
             </Form.Group>
-            <Button type="submit" variant="dark" className="w-100 py-2">
-              Update Profile
+            <Button type="submit" variant="dark" className="w-100 py-2" disabled={loading}>
+              {loading ? <Spinner as="span" animation="border" size="sm" /> : 'Update Profile'}
             </Button>
           </Form>
         </Col>

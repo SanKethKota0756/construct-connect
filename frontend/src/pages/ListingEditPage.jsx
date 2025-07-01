@@ -1,19 +1,17 @@
-// frontend/src/pages/ListingEditPage.jsx - CORRECTED
+// frontend/src/pages/ListingEditPage.jsx - CLEANED AND UPDATED
 
-import React, { useState, useEffect, useContext } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
-// The 'Image' component is now correctly imported here
+import React, { useState, useEffect } from 'react'; // useContext and AuthContext removed
+import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Form, Button, Row, Col, Alert, Card, Spinner, Image } from 'react-bootstrap';
-import axios from 'axios';
+import API from '../api';
 import ImageUpload from '../components/ImageUpload';
 
 const ListingEditPage = () => {
   const { id: listingId } = useParams();
-  const { userInfo } = useContext(AuthContext);
   const navigate = useNavigate();
+  // The 'userInfo' variable is no longer needed here
 
-  // State for all form fields
+  // ... (All other state variables remain the same)
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
@@ -25,7 +23,6 @@ const ListingEditPage = () => {
   const [zipCode, setZipCode] = useState('');
   const [location, setLocation] = useState('');
   const [images, setImages] = useState([]);
-  
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -33,7 +30,7 @@ const ListingEditPage = () => {
   useEffect(() => {
     const fetchListing = async () => {
       try {
-        const { data } = await axios.get(`/api/listings/${listingId}`);
+        const { data } = await API.get(`/api/listings/${listingId}`);
         setTitle(data.title);
         setDescription(data.description);
         setCategory(data.category);
@@ -67,14 +64,11 @@ const ListingEditPage = () => {
     setError('');
     setSuccess('');
     try {
-      const config = { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${userInfo.token}` } };
       const listingData = { title, description, category, condition, quantity, unit, price, isFree, zipCode, location, images };
-      
-      await axios.put(`/api/listings/${listingId}`, listingData, config);
-
+      // The API call no longer needs the token passed manually
+      await API.put(`/api/listings/${listingId}`, listingData);
       setSuccess('Listing updated successfully!');
       setTimeout(() => navigate('/dashboard'), 2000);
-
     } catch (err) {
       setError(err.response?.data?.message || err.message);
     }
@@ -90,7 +84,6 @@ const ListingEditPage = () => {
           <p className="text-muted mb-4">Update the details of your material listing.</p>
           {error && <Alert variant="danger">{error}</Alert>}
           {success && <Alert variant="success">{success}</Alert>}
-          
           <Form onSubmit={submitHandler}>
             <Card className="p-4 shadow-sm">
                 <h4 className="mb-3">Listing Details</h4>
@@ -104,11 +97,10 @@ const ListingEditPage = () => {
                 <Form.Group className="mb-3" controlId="isFree"><Form.Check type="checkbox" label="List for free" checked={isFree} onChange={(e) => setIsFree(e.target.checked)} /></Form.Group>
                 {!isFree && (<Form.Group className="mb-3" controlId="price"><Form.Label>Price (₹)</Form.Label><Form.Control type="number" placeholder="e.g., 2500" value={price} onChange={(e) => setPrice(e.target.value)} /></Form.Group>)}
                 <Form.Group className="mb-3" controlId="zipCode"><Form.Label>Zip Code *</Form.Label><Form.Control type="text" value={zipCode} onChange={(e) => setZipCode(e.target.value)} required /></Form.Group>
-                <Form.Group className="mb-3" controlId="location"><Form.Label>Location *</Form.Label><Form.Control type="text" placeholder="e.g., Brooklyn, NY" value={location} onChange={(e) => setLocation(e.target.value)} required /><Form.Text className="text-muted">Please provide a general location like City, State. Do not use your full address.</Form.Text></Form.Group>
+                <Form.Group className="mb-3" controlId="location"><Form.Label>Location *</Form.Label><Form.Control type="text" placeholder="e.g., Hyderabad, TG" value={location} onChange={(e) => setLocation(e.target.value)} required /><Form.Text className="text-muted">Please provide a general location like City, State.</Form.Text></Form.Group>
                 <Button type="submit" variant="dark" className="w-100 py-2 fw-bold">Update Listing</Button>
             </Card>
           </Form>
-
         </Col>
       </Row>
     </Container>

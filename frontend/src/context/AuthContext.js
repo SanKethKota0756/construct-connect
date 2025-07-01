@@ -1,8 +1,8 @@
-// frontend/src/context/AuthContext.js - UPDATED
+// frontend/src/context/AuthContext.js - FULLY UPDATED
 
 import React, { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import API from '../api'; // 1. CHANGED: Import our new central API instance instead of axios
 
 const AuthContext = createContext();
 
@@ -17,8 +17,8 @@ const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const config = { headers: { 'Content-Type': 'application/json' } };
-      const { data } = await axios.post('/api/users/login', { email, password }, config);
+      // 2. CHANGED: Use API.post and remove the config object and full URL
+      const { data } = await API.post('/api/users/login', { email, password });
       setUserInfo(data);
       localStorage.setItem('userInfo', JSON.stringify(data));
       navigate('/');
@@ -27,8 +27,8 @@ const AuthProvider = ({ children }) => {
 
   const signup = async (name, email, password, zipCode, phone) => {
     try {
-      const config = { headers: { 'Content-Type': 'application/json' } };
-      const { data } = await axios.post('/api/users', { name, email, password, zipCode, phone }, config);
+      // 3. CHANGED: Use API.post and remove the config object and full URL
+      const { data } = await API.post('/api/users', { name, email, password, zipCode, phone });
       setUserInfo(data);
       localStorage.setItem('userInfo', JSON.stringify(data));
       navigate('/');
@@ -41,14 +41,11 @@ const AuthProvider = ({ children }) => {
     navigate('/login');
   };
 
-  // --- ADD THIS NEW FUNCTION ---
-  // This function will be called from the profile page after a successful update
   const updateUser = (newUserInfo) => {
     setUserInfo(newUserInfo);
     localStorage.setItem('userInfo', JSON.stringify(newUserInfo));
   };
 
-  // 7. Provide the new function to the rest of the app
   return (
     <AuthContext.Provider value={{ userInfo, login, signup, logout, updateUser }}>
       {children}

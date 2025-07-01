@@ -1,11 +1,11 @@
-// frontend/src/pages/SearchPage.jsx - UPDATED
+// frontend/src/pages/SearchPage.jsx - CLEANED AND UPDATED
 
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom'; // 'Link' has been removed from this import
 import { Container, Row, Col, Spinner, Alert } from 'react-bootstrap';
-import axios from 'axios';
+import API from '../api';
 import ListingCard from '../components/ListingCard';
-import EmptyState from '../components/EmptyState'; // 1. Import the new component
+import EmptyState from '../components/EmptyState';
 
 const SearchPage = () => {
   const [searchParams] = useSearchParams();
@@ -23,7 +23,7 @@ const SearchPage = () => {
       try {
         setLoading(true);
         const params = new URLSearchParams({ keyword, location, minPrice, maxPrice }).toString();
-        const { data } = await axios.get(`/api/listings?${params}`);
+        const { data } = await API.get(`/api/listings?${params}`);
         setListings(data);
         setLoading(false);
       } catch (err) {
@@ -48,10 +48,9 @@ const SearchPage = () => {
       ) : error ? (
         <Alert variant="danger">{error}</Alert>
       ) : listings.length === 0 ? (
-        // 2. Use the new EmptyState component here
         <EmptyState 
           title="No Listings Found"
-          message="Your search returned no results. Try adjusting your filters or go back to the homepage."
+          message="Your search returned no results. Try adjusting your filters."
           buttonText="Go Back to Homepage"
           buttonLink="/"
         />

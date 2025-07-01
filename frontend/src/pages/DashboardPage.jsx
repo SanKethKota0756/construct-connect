@@ -1,10 +1,10 @@
-// frontend/src/pages/DashboardPage.jsx - COMPLETE AND FINAL VERSION
+// frontend/src/pages/DashboardPage.jsx - FULLY CORRECTED
 
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { Container, Row, Col, Card, Button, Tabs, Tab, Alert, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import API from '../api';
 import DashboardListingItem from '../components/DashboardListingItem';
 import EmptyState from '../components/EmptyState';
 import { ListTask } from 'react-bootstrap-icons';
@@ -20,8 +20,7 @@ const DashboardPage = () => {
     if (!userInfo || !userInfo.token) { setLoading(false); return; }
     try {
       setLoading(true);
-      const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      const { data } = await axios.get('/api/listings/my-listings', config);
+      const { data } = await API.get('/api/listings/my-listings');
       setMyListings(data);
       setLoading(false);
     } catch (err) {
@@ -36,8 +35,7 @@ const DashboardPage = () => {
     setSuccess(''); setError('');
     if (window.confirm('Are you sure you want to mark this item as sold?')) {
       try {
-        const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-        await axios.put(`/api/listings/${id}/sold`, {}, config);
+        await API.put(`/api/listings/${id}/sold`);
         setSuccess('Listing marked as sold successfully!');
         fetchMyListings();
       } catch (err) {
@@ -51,10 +49,9 @@ const DashboardPage = () => {
     setError('');
     if (window.confirm('Are you sure you want to permanently delete this listing? This action cannot be undone.')) {
       try {
-        const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-        await axios.delete(`/api/listings/${id}`, config);
+        await API.delete(`/api/listings/${id}`);
         setSuccess('Listing deleted successfully!');
-        fetchMyListings(); // Refresh the listings after deletion
+        fetchMyListings();
       } catch (err) {
         setError(err.response?.data?.message || err.message);
       }
@@ -72,7 +69,10 @@ const DashboardPage = () => {
       </Row>
       <Row className="mb-4">
         <Col md={4}><Card body className="text-center shadow-sm"><Card.Title>Active Listings</Card.Title><Card.Text className="fs-2 fw-bold">{activeListings.length}</Card.Text></Card></Col>
+        
+        {/* THIS IS THE CORRECTED LINE */}
         <Col md={4}><Card body className="text-center shadow-sm"><Card.Title>Sold Items</Card.Title><Card.Text className="fs-2 fw-bold">{soldListings.length}</Card.Text></Card></Col>
+        
         <Col md={4}><Card body className="text-center shadow-sm"><Card.Title>Messages</Card.Title><Card.Text className="fs-2 fw-bold">0</Card.Text></Card></Col>
       </Row>
       

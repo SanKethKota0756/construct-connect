@@ -1,13 +1,13 @@
-// frontend/src/components/ImageUpload.jsx
+// frontend/src/components/ImageUpload.jsx - CLEANED AND UPDATED
 
-import React, { useState, useContext } from 'react';
-import { Form, Button, Image, Spinner, Alert } from 'react-bootstrap';
-import axios from 'axios';
-import { AuthContext } from '../context/AuthContext';
+import React, { useState } from 'react'; // useContext removed
+import { Form, Button, Image, Spinner } from 'react-bootstrap';
+import API from '../api';
+// AuthContext import removed
 import { Upload } from 'react-bootstrap-icons';
 
 const ImageUpload = ({ onUploadSuccess }) => {
-  const { userInfo } = useContext(AuthContext);
+  // userInfo is no longer needed here
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState('');
   const [uploading, setUploading] = useState(false);
@@ -16,16 +16,8 @@ const ImageUpload = ({ onUploadSuccess }) => {
   const fileSelectedHandler = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
-      // Basic validation for file type and size
-      if (!selectedFile.type.startsWith('image/')) {
-        setError('Please select an image file (jpg, jpeg, png).');
-        return;
-      }
-      if (selectedFile.size > 5 * 1024 * 1024) { // 5MB limit
-        setError('File size cannot exceed 5MB.');
-        return;
-      }
-
+      if (!selectedFile.type.startsWith('image/')) { setError('Please select an image file (jpg, jpeg, png).'); return; }
+      if (selectedFile.size > 5 * 1024 * 1024) { setError('File size cannot exceed 5MB.'); return; }
       setError('');
       setFile(selectedFile);
       setPreview(URL.createObjectURL(selectedFile));
@@ -34,27 +26,20 @@ const ImageUpload = ({ onUploadSuccess }) => {
 
   const uploadFileHandler = async () => {
     if (!file) return;
-
     const formData = new FormData();
-    // 'image' must match the backend: upload.single('image')
-    formData.append('image', file); 
+    formData.append('image', file);
     setUploading(true);
     setError('');
 
     try {
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-
-      const { data } = await axios.post('/api/upload', formData, config);
+      // The API call no longer needs the token passed manually
+      const { data } = await API.post('/api/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
       
-      // Call the parent component's function with the new image URL
       onUploadSuccess(data.imageUrl); 
       setUploading(false);
-      setPreview(''); // Clear preview after successful upload
+      setPreview('');
       setFile(null);
 
     } catch (err) {
