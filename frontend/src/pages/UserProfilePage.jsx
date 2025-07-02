@@ -1,17 +1,15 @@
-// frontend/src/pages/UserProfilePage.jsx - NEW FILE
+// frontend/src/pages/UserProfilePage.jsx - FULLY CORRECTED FOR DEPLOYMENT
 
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Container, Row, Col, Spinner, Alert, Card } from 'react-bootstrap';
-import axios from 'axios';
+import API from '../api'; // 1. CHANGED: Import our new central API instance instead of axios
 import ListingCard from '../components/ListingCard';
 import { PersonCircle } from 'react-bootstrap-icons';
-import EmptyState from '../components/EmptyState'; // We'll use our professional empty state component
+import EmptyState from '../components/EmptyState';
 
 const UserProfilePage = () => {
-  // Get the user's ID from the URL (e.g., /profile/some-user-id)
   const { id: userId } = useParams();
-
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -20,8 +18,8 @@ const UserProfilePage = () => {
     const fetchUserData = async () => {
       try {
         setLoading(true);
-        // Make the API call to our new backend endpoint
-        const { data } = await axios.get(`/api/users/${userId}/listings`);
+        // 2. CHANGED: Use API.get() which knows the correct backend URL
+        const { data } = await API.get(`/api/users/${userId}/listings`);
         setUserData(data);
         setLoading(false);
       } catch (err) {
@@ -30,7 +28,7 @@ const UserProfilePage = () => {
       }
     };
     fetchUserData();
-  }, [userId]); // Re-fetch if the userId in the URL changes
+  }, [userId]);
 
   return (
     <Container className="py-5">
@@ -40,7 +38,6 @@ const UserProfilePage = () => {
         <Alert variant="danger">{error}</Alert>
       ) : userData ? (
         <>
-          {/* Profile Header Section */}
           <Row className="mb-4 align-items-center bg-light p-4 rounded">
             <Col xs="auto">
               <PersonCircle size={60} className="text-secondary" />
@@ -56,7 +53,6 @@ const UserProfilePage = () => {
           <h2 className="mt-5 mb-4">Active Listings from this Seller</h2>
           <hr />
 
-          {/* Listings Grid Section */}
           {userData.listings.length === 0 ? (
             <EmptyState 
               title="No Active Listings"
