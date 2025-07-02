@@ -20,6 +20,7 @@ import ListingDetailPage from './pages/ListingDetailPage';
 import ListingEditPage from './pages/ListingEditPage';
 import ProfilePage from './pages/ProfilePage';
 import SearchPage from './pages/SearchPage';
+import BrowsePage from './pages/BrowsePage';
 import UserProfilePage from './pages/UserProfilePage'; // The new Public Profile page
 
 // Import Styles
@@ -45,6 +46,7 @@ function App() {
               <Route path="/create-listing" element={<CreateListingPage />} />
               <Route path="/listing/:id/edit" element={<ListingEditPage />} />
               <Route path="/profile-settings" element={<ProfilePage />} />
+              <Route path="/browse" element={<BrowsePage />} />
             </Routes>
           </Layout>
         </SearchProvider>

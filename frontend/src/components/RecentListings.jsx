@@ -1,8 +1,8 @@
-// frontend/src/components/RecentListings.jsx - CLEANED AND UPDATED
+// frontend/src/components/RecentListings.jsx - UPDATED
 
 import React, { useState, useEffect } from 'react';
-// 'Button' has been removed from this import line
-import { Container, Row, Col, Spinner, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Button, Spinner, Alert } from 'react-bootstrap';
+import { Link } from 'react-router-dom'; // Import Link
 import API from '../api';
 import ListingCard from './ListingCard';
 
@@ -16,26 +16,20 @@ const RecentListings = () => {
       try {
         setLoading(true);
         const { data } = await API.get('/api/listings');
-        setListings(data.slice(0, 6));
+        // THE CHANGE IS HERE: We now only take the first 6 items for the homepage
+        setListings(data.slice(0, 6)); 
         setLoading(false);
       } catch (err) {
         setError('Could not fetch recent listings.');
         setLoading(false);
       }
     };
-
     fetchListings();
   }, []);
 
-  if (loading) {
-    return <div className="text-center py-5"><Spinner animation="border" /></div>;
-  }
-  if (error) {
-    return <Container className="py-5"><Alert variant="danger">{error}</Alert></Container>;
-  }
-  if (listings.length === 0) {
-    return null;
-  }
+  if (loading) { return <div className="text-center py-5"><Spinner animation="border" /></div>; }
+  if (error) { return <Container className="py-5"><Alert variant="danger">{error}</Alert></Container>; }
+  if (listings.length === 0) { return null; }
 
   return (
     <div>
@@ -61,7 +55,15 @@ const RecentListings = () => {
             </Col>
           ))}
         </Row>
-        {/* The "View All" button was already removed, so no JSX changes are needed */}
+        
+        {/* ADD THE NEW BUTTON HERE */}
+        <div className="text-center mt-5">
+          <Link to="/browse">
+            <Button variant="outline-orange" className="btn-outline-orange px-5 py-2">
+              View All Listings
+            </Button>
+          </Link>
+        </div>
       </Container>
     </div>
   );
