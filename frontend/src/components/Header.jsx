@@ -1,10 +1,10 @@
-// frontend/src/components/Header.jsx - DYNAMIC MENUS FOR BUYERS & SELLERS
+// frontend/src/components/Header.jsx - FINAL CORRECTED VERSION
 
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { Container, Nav, Navbar, Button, NavDropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import API from '../api'; // 1. CHANGED: Use our central API instance instead of axios
 import { 
   BoxArrowInRight, Plus, WrenchAdjustable, PersonCircle, BoxSeam, 
   ChatDots, BoxArrowLeft, Building, GearFill 
@@ -12,20 +12,16 @@ import {
 
 const Header = () => {
   const { userInfo, logout } = useContext(AuthContext);
-  
-  // 1. New state to determine if the user has any listings
   const [isSeller, setIsSeller] = useState(false);
 
-  // 2. This effect runs when userInfo changes (i.e., when a user logs in)
   useEffect(() => {
     const checkForListings = async () => {
-      // Only run if there is a logged-in user
       if (userInfo && userInfo.token) {
         try {
-          const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-          const { data } = await axios.get('/api/listings/my-listings', config);
+          // 2. CHANGED: Use API.get() and remove the manual config object.
+          // This now correctly calls your live Render backend.
+          const { data } = await API.get('/api/listings/my-listings');
           
-          // If the user has 1 or more listings, they are a seller
           if (data.length > 0) {
             setIsSeller(true);
           } else {
@@ -33,15 +29,15 @@ const Header = () => {
           }
         } catch (error) {
           console.error("Could not check for user's listings", error);
-          setIsSeller(false); // Default to buyer if check fails
+          setIsSeller(false);
         }
       } else {
-        setIsSeller(false); // Not a seller if not logged in
+        setIsSeller(false);
       }
     };
 
     checkForListings();
-  }, [userInfo]); // Dependency array: re-run when userInfo changes
+  }, [userInfo]);
 
   const handleLogout = () => {
     logout();
@@ -60,14 +56,12 @@ const Header = () => {
             {userInfo ? (
               // If user IS logged in, decide which menu to show
               <>
-                {/* This button is always visible to logged-in users */}
                 <Link to="/create-listing" className="btn-link-wrapper">
                     <Button variant="orange" className="btn-orange d-flex align-items-center me-3">
                         <Plus size={24} className="me-1"/> List Materials
                     </Button>
                 </Link>
 
-                {/* 3. Conditional rendering for the dropdown menu */}
                 {isSeller ? (
                   // --- SELLER MENU ---
                   <NavDropdown title={<><PersonCircle size={24} className="me-2" /><span>{userInfo.name}</span></>} id="seller-dropdown" align="end">
