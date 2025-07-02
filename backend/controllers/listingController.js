@@ -1,7 +1,7 @@
-// backend/controllers/listingController.js - COMPLETE AND FINAL VERSION
+// backend/controllers/listingController.js - COMPLETE AND UPDATED
 
 const Listing = require('../models/listingModel.js');
-const User = require('../models/userModel.js'); // Ensure User model is imported
+const User = require('../models/userModel.js');
 
 const getListings = async (req, res) => {
   const query = { status: 'Active' };
@@ -31,8 +31,16 @@ const getMyListings = async (req, res) => {
   res.json(listings);
 };
 
+// @desc    Fetch a single listing by its ID
+// @route   GET /api/listings/:id
+// @access  Public
 const getListingById = async (req, res) => {
-  const listing = await Listing.findById(req.params.id).populate('user', 'name email phone');
+  // THE CHANGE IS HERE: We now only populate 'name' and 'email' for privacy.
+  const listing = await Listing.findById(req.params.id).populate(
+    'user',
+    'name email'
+  );
+
   if (listing) {
     res.json(listing);
   } else {
@@ -92,21 +100,14 @@ const deleteListing = async (req, res) => {
   }
 };
 
-// @desc    Fetch all active listings for a specific user (public)
-// @route   GET /api/users/:id/listings
-// @access  Public
 const getUserListings = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-
     if (!user) {
       res.status(404);
       throw new Error('User not found');
     }
-
     const listings = await Listing.find({ user: req.params.id, status: 'Active' });
-    
-    // Send back public user info and their listings
     res.json({
       user: { name: user.name, createdAt: user.createdAt },
       listings,

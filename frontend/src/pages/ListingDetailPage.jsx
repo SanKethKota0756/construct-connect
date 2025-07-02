@@ -1,11 +1,11 @@
-// frontend/src/pages/ListingDetailPage.jsx - FULLY UPDATED FOR DEPLOYMENT
+// frontend/src/pages/ListingDetailPage.jsx - COMPLETE AND UPDATED
 
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { Container, Row, Col, Image, Card, Button, Badge, Spinner, Alert } from 'react-bootstrap';
 import { Envelope, Telephone, PersonCircle } from 'react-bootstrap-icons';
-import API from '../api'; // 1. CHANGED: Import our new central API instance
+import API from '../api';
 
 const ListingDetailPage = () => {
   const { id: listingId } = useParams();
@@ -20,7 +20,6 @@ const ListingDetailPage = () => {
     const fetchListing = async () => {
       try {
         setLoading(true);
-        // 2. CHANGED: Use API.get
         const { data } = await API.get(`/api/listings/${listingId}`);
         setListing(data);
         setLoading(false);
@@ -79,6 +78,8 @@ const ListingDetailPage = () => {
               </div>
             </Col>
           </Row>
+
+          {/* This section now only shows Name and Email */}
           {showContactInfo && (
             <Row className="mt-4">
               <Col md={{ span: 7 }}>
@@ -90,10 +91,8 @@ const ListingDetailPage = () => {
                       <strong>Name:</strong> 
                       <Link to={`/profile/${listing.user._id}`} className="ms-2">{listing.user.name}</Link>
                     </p>
-                    <p><Envelope className="me-2" /> <strong>Email:</strong> <a href={`mailto:${listing.user.email}`}>{listing.user.email}</a></p>
-                    {listing.user.phone && (
-                      <p><Telephone className="me-2" /> <strong>Phone:</strong> <a href={`tel:${listing.user.phone}`}>{listing.user.phone}</a></p>
-                    )}
+                    <p><Envelope className="me-2" /> _<strong>Email:</strong> <a href={`mailto:${listing.user.email}`}>{listing.user.email}</a></p>
+                    {/* The phone number block has been completely removed */}
                   </Card.Body>
                 </Card>
               </Col>
