@@ -1,16 +1,15 @@
-// frontend/src/components/Paginate.jsx - NEW FILE
+// frontend/src/components/Paginate.jsx - CORRECTED VERSION
 
 import React from 'react';
 import { Pagination } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+// 1. We now import Link from react-router-dom instead of LinkContainer
+import { Link } from 'react-router-dom';
 
 const Paginate = ({ pages, page, keyword = '', location = '' }) => {
-  // Don't show pagination if there's only one page or no pages
   if (pages <= 1) {
     return null;
   }
 
-  // Construct the base URL for search or browse
   const getBaseUrl = (pageNum) => {
     if (keyword || location) {
       const searchParams = new URLSearchParams({ keyword, location, page: pageNum }).toString();
@@ -22,9 +21,10 @@ const Paginate = ({ pages, page, keyword = '', location = '' }) => {
   return (
     <Pagination className="justify-content-center my-4">
       {[...Array(pages).keys()].map((x) => (
-        <LinkContainer key={x + 1} to={getBaseUrl(x + 1)}>
+        // 2. We now wrap the Pagination.Item inside a standard Link component
+        <Link key={x + 1} to={getBaseUrl(x + 1)} className="page-link">
           <Pagination.Item active={x + 1 === page}>{x + 1}</Pagination.Item>
-        </LinkContainer>
+        </Link>
       ))}
     </Pagination>
   );
