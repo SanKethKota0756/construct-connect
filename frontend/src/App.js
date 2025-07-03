@@ -11,7 +11,7 @@ import HomePage from './pages/HomePage';
 import SignUpPage from './pages/SignUpPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
-import ListingCreatePage from './pages/ListingCreatePage'; // The renamed form page
+import ListingCreatePage from './pages/ListingCreatePage'; // Renamed form page
 import ListingDetailPage from './pages/ListingDetailPage';
 import ListingEditPage from './pages/ListingEditPage';
 import ProfilePage from './pages/ProfilePage';
@@ -28,7 +28,7 @@ import PricingTipsPage from './pages/info/PricingTipsPage';
 import CareersPage from './pages/info/CareersPage';
 import ContactPage from './pages/info/ContactPage';
 import SearchInfoPage from './pages/info/SearchInfoPage';
-import CreateListingInfoPage from './pages/info/CreateListingInfoPage'; // The new info page
+import CreateListingInfoPage from './pages/info/CreateListingInfoPage'; // New info page
 
 import './App.css'; 
 
@@ -51,12 +51,12 @@ function App() {
               
               {/* Private Routes */}
               <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/listings/new" element={<ListingCreatePage />} /> {/* The new form route */}
+              <Route path="/listings/new" element={<ListingCreatePage />} /> {/* New route for the form */}
               <Route path="/listing/:id/edit" element={<ListingEditPage />} />
               <Route path="/profile-settings" element={<ProfilePage />} />
               
-              {/* Informational Pages from Footer */}
-              <Route path="/create-listing" element={<CreateListingInfoPage />} /> {/* Info page route */}
+              {/* Informational Pages */}
+              <Route path="/create-listing" element={<CreateListingInfoPage />} /> {/* Route for the info page */}
               <Route path="/search" element={<SearchInfoPage />} />
               <Route path="/about" element={<AboutUsPage />} />
               <Route path="/how-to-buy" element={<HowToBuyPage />} />

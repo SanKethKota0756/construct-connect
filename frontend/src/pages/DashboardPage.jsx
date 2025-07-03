@@ -1,4 +1,4 @@
-// frontend/src/pages/DashboardPage.jsx - FULLY CORRECTED
+// frontend/src/pages/DashboardPage.jsx - COMPLETE AND FINAL VERSION
 
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
@@ -17,7 +17,10 @@ const DashboardPage = () => {
   const [success, setSuccess] = useState('');
 
   const fetchMyListings = React.useCallback(async () => {
-    if (!userInfo || !userInfo.token) { setLoading(false); return; }
+    if (!userInfo || !userInfo.token) {
+      setLoading(false);
+      return;
+    }
     try {
       setLoading(true);
       const { data } = await API.get('/api/listings/my-listings');
@@ -29,15 +32,18 @@ const DashboardPage = () => {
     }
   }, [userInfo]);
 
-  useEffect(() => { fetchMyListings(); }, [fetchMyListings]);
+  useEffect(() => {
+    fetchMyListings();
+  }, [fetchMyListings]);
 
   const markAsSoldHandler = async (id) => {
-    setSuccess(''); setError('');
+    setSuccess('');
+    setError('');
     if (window.confirm('Are you sure you want to mark this item as sold?')) {
       try {
         await API.put(`/api/listings/${id}/sold`);
         setSuccess('Listing marked as sold successfully!');
-        fetchMyListings();
+        fetchMyListings(); // Refresh the list
       } catch (err) {
         setError(err.response?.data?.message || err.message);
       }
@@ -51,8 +57,8 @@ const DashboardPage = () => {
       try {
         await API.delete(`/api/listings/${id}`);
         setSuccess('Listing deleted successfully!');
-        fetchMyListings();
-      } catch (err) { // --- THE FIX IS HERE ---
+        fetchMyListings(); // Refresh the list
+      } catch (err) {
         setError(err.response?.data?.message || err.message);
       }
     }
@@ -64,8 +70,15 @@ const DashboardPage = () => {
   return (
     <Container className="py-5">
       <Row className="align-items-center mb-4">
-        <Col><h1>Dashboard</h1><p className="text-muted">Manage your listings and messages</p></Col>
-        <Col className="text-end"><Link to="/listings/new"><Button variant="orange" className="btn-orange">+ Create New Listing</Button></Link></Col>
+        <Col>
+          <h1>Dashboard</h1>
+          <p className="text-muted">Manage your listings and messages</p>
+        </Col>
+        <Col className="text-end">
+          <Link to="/listings/new">
+            <Button variant="orange" className="btn-orange">+ Create New Listing</Button>
+          </Link>
+        </Col>
       </Row>
       <Row className="mb-4">
         <Col md={4}><Card body className="text-center shadow-sm"><Card.Title>Active Listings</Card.Title><Card.Text className="fs-2 fw-bold">{activeListings.length}</Card.Text></Card></Col>
@@ -77,12 +90,18 @@ const DashboardPage = () => {
       {success && <Alert variant="success" onClose={() => setSuccess('')} dismissible>{success}</Alert>}
 
       {loading ? (
-        <div className="text-center"><Spinner animation="border" /></div>
+        <div className="text-center py-5"><Spinner animation="border" /></div>
       ) : (
         <Tabs defaultActiveKey="active" id="listings-tabs" className="mb-3" fill>
           <Tab eventKey="active" title={`Active Listings (${activeListings.length})`}>
             {activeListings.length === 0 ? (
-              <EmptyState icon={ListTask} title="You don't have any active listings yet." message="Ready to clear out some space? List your surplus materials now." buttonText="+ Create Your First Listing" buttonLink="/listings/new" />
+              <EmptyState 
+                icon={ListTask} 
+                title="You don't have any active listings yet." 
+                message="Ready to clear out some space? List your surplus materials now." 
+                buttonText="+ Create Your First Listing" 
+                buttonLink="/listings/new" 
+              />
             ) : (
               <div>
                 {activeListings.map(listing => (
@@ -93,7 +112,12 @@ const DashboardPage = () => {
           </Tab>
           <Tab eventKey="sold" title={`Sold Items (${soldListings.length})`}>
             {soldListings.length === 0 ? (
-              <EmptyState icon={ListTask} title="No sold items yet." message="Once you mark an item as sold, it will appear here." showButton={false} />
+              <EmptyState 
+                icon={ListTask} 
+                title="No sold items yet." 
+                message="Once you mark an item as sold, it will appear here." 
+                showButton={false} 
+              />
             ) : (
               <div>
                 {soldListings.map(listing => (

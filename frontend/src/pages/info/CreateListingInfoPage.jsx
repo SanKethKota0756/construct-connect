@@ -14,7 +14,7 @@ const CreateListingInfoPage = () => {
       <hr />
       <h4>Getting Started</h4>
       <p>
-        To begin, you must be a logged-in user. If you don't have an account, you can sign up in seconds. Once you're logged in, you can click the "List Materials" button in the header at any time.
+        To begin, you must be a logged-in user. You can start the process by clicking the "List Materials" button in the header or on your dashboard at any time.
       </p>
       <h4>Tips for a Great Listing</h4>
       <ul>

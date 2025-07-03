@@ -8,7 +8,7 @@ import API from '../api';
 import ImageUpload from '../components/ImageUpload';
 
 // Component name changed
-const ListingCreatePage = () => { 
+const ListingCreatePage = () => {
   const { userInfo } = useContext(AuthContext);
 
   const [title, setTitle] = useState('');
@@ -77,4 +77,4 @@ const ListingCreatePage = () => {
 };
 
 // Export name changed
-export default ListingCreatePage; 
+export default ListingCreatePage;

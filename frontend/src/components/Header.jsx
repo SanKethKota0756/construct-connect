@@ -39,7 +39,7 @@ const Header = () => {
           <Nav className="ms-auto">
             {userInfo ? (
               <>
-                {/* UPDATED: This button now points to /listings/new */}
+                {/* This button now points to the new form route */}
                 <Link to="/listings/new" className="btn-link-wrapper">
                     <Button variant="orange" className="btn-orange d-flex align-items-center me-3">
                         <Plus size={24} className="me-1"/> List Materials
@@ -58,7 +58,7 @@ const Header = () => {
                     <NavDropdown.Item as={Link} to="/profile-settings"><GearFill className="me-2" /> Profile Settings</NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/messages"><ChatDots className="me-2" /> Messages</NavDropdown.Item>
                     <NavDropdown.Divider />
-                    {/* UPDATED: This link now points to /listings/new */}
+                    {/* This link also points to the new form route */}
                     <NavDropdown.Item as={Link} to="/listings/new"><Building className="me-2" /> Become a Seller</NavDropdown.Item>
                     <NavDropdown.Divider />
                     <NavDropdown.Item onClick={handleLogout} className="text-danger"><BoxArrowLeft className="me-2" /> Log Out</NavDropdown.Item>
