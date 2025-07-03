@@ -1,9 +1,15 @@
-// backend/controllers/listingController.js - COMPLETE AND UPDATED
+// backend/controllers/listingController.js - FULLY UPDATED
 
 const Listing = require('../models/listingModel.js');
 const User = require('../models/userModel.js');
 
+// @desc    Fetch all active listings (with search, filter, and pagination)
+// @route   GET /api/listings
+// @access  Public
 const getListings = async (req, res) => {
+  const pageSize = 6; // Items per page
+  const page = Number(req.query.pageNumber) || 1;
+
   const query = { status: 'Active' };
   if (req.query.keyword) { query.$or = [{ title: { $regex: req.query.keyword, $options: 'i' } }, { description: { $regex: req.query.keyword, $options: 'i' } }]; }
   if (req.query.location) { query.location = { $regex: req.query.location, $options: 'i' }; }
@@ -12,8 +18,18 @@ const getListings = async (req, res) => {
     if (req.query.minPrice) { query.price.$gte = Number(req.query.minPrice); }
     if (req.query.maxPrice) { query.price.$lte = Number(req.query.maxPrice); }
   }
-  const listings = await Listing.find(query).sort({ createdAt: -1 });
-  res.json(listings);
+
+  try {
+    const count = await Listing.countDocuments(query);
+    const listings = await Listing.find(query)
+      .limit(pageSize)
+      .skip(pageSize * (page - 1))
+      .sort({ createdAt: -1 });
+
+    res.json({ listings, page, pages: Math.ceil(count / pageSize) });
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error' });
+  }
 };
 
 const createListing = async (req, res) => {
@@ -31,22 +47,9 @@ const getMyListings = async (req, res) => {
   res.json(listings);
 };
 
-// @desc    Fetch a single listing by its ID
-// @route   GET /api/listings/:id
-// @access  Public
 const getListingById = async (req, res) => {
-  // THE CHANGE IS HERE: We now only populate 'name' and 'email' for privacy.
-  const listing = await Listing.findById(req.params.id).populate(
-    'user',
-    'name email'
-  );
-
-  if (listing) {
-    res.json(listing);
-  } else {
-    res.status(404);
-    throw new Error('Listing not found');
-  }
+  const listing = await Listing.findById(req.params.id).populate('user', 'name email phone');
+  if (listing) { res.json(listing); } else { res.status(404); throw new Error('Listing not found'); }
 };
 
 const updateListing = async (req, res) => {
@@ -66,10 +69,7 @@ const updateListing = async (req, res) => {
     listing.location = req.body.location || listing.location;
     const updatedListing = await listing.save();
     res.json(updatedListing);
-  } else {
-    res.status(404);
-    throw new Error('Listing not found');
-  }
+  } else { res.status(404); throw new Error('Listing not found'); }
 };
 
 const updateListingToSold = async (req, res) => {
@@ -79,52 +79,27 @@ const updateListingToSold = async (req, res) => {
     listing.status = 'Sold';
     const updatedListing = await listing.save();
     res.json(updatedListing);
-  } else {
-    res.status(404);
-    throw new Error('Listing not found');
-  }
+  } else { res.status(404); throw new Error('Listing not found'); }
 };
 
 const deleteListing = async (req, res) => {
   const listing = await Listing.findById(req.params.id);
   if (listing) {
-    if (listing.user.toString() !== req.user._id.toString()) {
-      res.status(401);
-      throw new Error('User not authorized');
-    }
+    if (listing.user.toString() !== req.user._id.toString()) { res.status(401); throw new Error('User not authorized'); }
     await listing.deleteOne();
     res.json({ message: 'Listing removed' });
-  } else {
-    res.status(404);
-    throw new Error('Listing not found');
-  }
+  } else { res.status(404); throw new Error('Listing not found'); }
 };
 
 const getUserListings = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    if (!user) {
-      res.status(404);
-      throw new Error('User not found');
-    }
+    if (!user) { res.status(404); throw new Error('User not found'); }
     const listings = await Listing.find({ user: req.params.id, status: 'Active' });
-    res.json({
-      user: { name: user.name, createdAt: user.createdAt },
-      listings,
-    });
-  } catch (error) {
-    res.status(404);
-    throw new Error('User not found');
-  }
+    res.json({ user: { name: user.name, createdAt: user.createdAt }, listings });
+  } catch (error) { res.status(404); throw new Error('User not found'); }
 };
 
 module.exports = {
-  getListings,
-  createListing,
-  getMyListings,
-  getListingById,
-  updateListing,
-  updateListingToSold,
-  deleteListing,
-  getUserListings,
+  getListings, createListing, getMyListings, getListingById, updateListing, updateListingToSold, deleteListing, getUserListings,
 };

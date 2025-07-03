@@ -1,8 +1,8 @@
-// frontend/src/components/RecentListings.jsx - UPDATED
+// frontend/src/components/RecentListings.jsx - FULLY UPDATED
 
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Spinner, Alert } from 'react-bootstrap';
-import { Link } from 'react-router-dom'; // Import Link
+import { Link } from 'react-router-dom';
 import API from '../api';
 import ListingCard from './ListingCard';
 
@@ -16,8 +16,8 @@ const RecentListings = () => {
       try {
         setLoading(true);
         const { data } = await API.get('/api/listings');
-        // THE CHANGE IS HERE: We now only take the first 6 items for the homepage
-        setListings(data.slice(0, 6)); 
+        // We only show the first 6 items on the homepage
+        setListings(data.listings.slice(0, 6)); 
         setLoading(false);
       } catch (err) {
         setError('Could not fetch recent listings.');
@@ -27,9 +27,9 @@ const RecentListings = () => {
     fetchListings();
   }, []);
 
-  if (loading) { return <div className="text-center py-5"><Spinner animation="border" /></div>; }
-  if (error) { return <Container className="py-5"><Alert variant="danger">{error}</Alert></Container>; }
-  if (listings.length === 0) { return null; }
+  if (loading) return <div className="text-center py-5"><Spinner animation="border" /></div>;
+  if (error) return <Container className="py-5"><Alert variant="danger">{error}</Alert></Container>;
+  if (listings.length === 0) return null;
 
   return (
     <div>
@@ -56,7 +56,7 @@ const RecentListings = () => {
           ))}
         </Row>
         
-        {/* ADD THE NEW BUTTON HERE */}
+        {/* The "View All Listings" button now links to our new browse page */}
         <div className="text-center mt-5">
           <Link to="/browse">
             <Button variant="outline-orange" className="btn-outline-orange px-5 py-2">
