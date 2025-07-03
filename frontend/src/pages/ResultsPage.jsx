@@ -1,13 +1,14 @@
-// frontend/src/pages/SearchPage.jsx - CLEANED AND UPDATED
+// frontend/src/pages/ResultsPage.jsx - RENAMED AND UPDATED
 
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom'; // 'Link' has been removed from this import
+import { useSearchParams, Link } from 'react-router-dom';
 import { Container, Row, Col, Spinner, Alert } from 'react-bootstrap';
 import API from '../api';
 import ListingCard from '../components/ListingCard';
 import EmptyState from '../components/EmptyState';
 
-const SearchPage = () => {
+// 1. Component name changed
+const ResultsPage = () => {
   const [searchParams] = useSearchParams();
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,7 +25,7 @@ const SearchPage = () => {
         setLoading(true);
         const params = new URLSearchParams({ keyword, location, minPrice, maxPrice }).toString();
         const { data } = await API.get(`/api/listings?${params}`);
-        setListings(data);
+        setListings(data.listings); // Assuming API returns { listings, page, pages }
         setLoading(false);
       } catch (err) {
         setError('Could not fetch search results.');
@@ -38,7 +39,7 @@ const SearchPage = () => {
     <Container className="py-5">
       <h1 className="mb-4">Search Results</h1>
       <p className="text-muted mb-4">
-        Showing results for: {keyword && <strong>{`'${keyword}' `}</strong>}
+        {keyword && <span>Showing results for <strong>{`'${keyword}' `}</strong></span>}
         {location && <span>in <strong>{location}</strong></span>}
       </p>
       <hr />
@@ -50,7 +51,7 @@ const SearchPage = () => {
       ) : listings.length === 0 ? (
         <EmptyState 
           title="No Listings Found"
-          message="Your search returned no results. Try adjusting your filters."
+          message="Your search returned no results. Try adjusting your filters or go back to the homepage."
           buttonText="Go Back to Homepage"
           buttonLink="/"
         />
@@ -75,4 +76,5 @@ const SearchPage = () => {
   );
 };
 
-export default SearchPage;
+// 2. Export name changed
+export default ResultsPage;

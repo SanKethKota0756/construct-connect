@@ -15,11 +15,11 @@ import CreateListingPage from './pages/CreateListingPage';
 import ListingDetailPage from './pages/ListingDetailPage';
 import ListingEditPage from './pages/ListingEditPage';
 import ProfilePage from './pages/ProfilePage';
-import SearchPage from './pages/SearchPage';
 import UserProfilePage from './pages/UserProfilePage';
 import BrowsePage from './pages/BrowsePage';
+import ResultsPage from './pages/ResultsPage'; // The renamed SearchPage
 
-// 1. Import all the new informational pages
+// Import Info Pages
 import AboutUsPage from './pages/info/AboutUsPage';
 import HowToBuyPage from './pages/info/HowToBuyPage';
 import SafetyTipsPage from './pages/info/SafetyTipsPage';
@@ -27,6 +27,7 @@ import SellerGuidePage from './pages/info/SellerGuidePage';
 import PricingTipsPage from './pages/info/PricingTipsPage';
 import CareersPage from './pages/info/CareersPage';
 import ContactPage from './pages/info/ContactPage';
+import SearchInfoPage from './pages/info/SearchInfoPage'; // The new info page
 
 import './App.css'; 
 
@@ -39,7 +40,7 @@ function App() {
             <Routes>
               {/* Main App Routes */}
               <Route path="/" element={<HomePage />} />
-              <Route path="/search" element={<SearchPage />} />
+              <Route path="/results" element={<ResultsPage />} /> {/* Route for search results */}
               <Route path="/browse" element={<BrowsePage />} />
               <Route path="/browse/page/:pageNumber" element={<BrowsePage />} />
               <Route path="/listing/:id" element={<ListingDetailPage />} />
@@ -53,7 +54,8 @@ function App() {
               <Route path="/listing/:id/edit" element={<ListingEditPage />} />
               <Route path="/profile-settings" element={<ProfilePage />} />
               
-              {/* 2. Add Routes for all the new static pages */}
+              {/* Informational Pages from Footer */}
+              <Route path="/search" element={<SearchInfoPage />} /> {/* The /search route now shows the info page */}
               <Route path="/about" element={<AboutUsPage />} />
               <Route path="/how-to-buy" element={<HowToBuyPage />} />
               <Route path="/safety-tips" element={<SafetyTipsPage />} />
