@@ -1,13 +1,14 @@
-// frontend/src/pages/CreateListingPage.jsx - FULLY UPDATED FOR DEPLOYMENT
+// frontend/src/pages/ListingCreatePage.jsx - RENAMED AND UPDATED
 
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { Container, Form, Button, Row, Col, Alert, Card, Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import API from '../api'; // 1. CHANGED: Import our new central API instance
+import API from '../api';
 import ImageUpload from '../components/ImageUpload';
 
-const CreateListingPage = () => {
+// Component name changed
+const ListingCreatePage = () => { 
   const { userInfo } = useContext(AuthContext);
 
   const [title, setTitle] = useState('');
@@ -25,31 +26,19 @@ const CreateListingPage = () => {
   const [success, setSuccess] = useState('');
 
   const handleUploadSuccess = (imageUrl) => {
-    if (images.length >= 5) {
-      setError('You can upload a maximum of 5 images.');
-      return;
-    }
+    if (images.length >= 5) { setError('You can upload a maximum of 5 images.'); return; }
     setImages([...images, imageUrl]); 
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (images.length === 0) {
-      setError('Please upload at least one image.');
-      return;
-    }
-    setError('');
-    setSuccess('');
+    if (images.length === 0) { setError('Please upload at least one image.'); return; }
+    setError(''); setSuccess('');
 
     try {
       const listingData = { title, description, category, condition, quantity, unit, price: isFree ? 0 : price, isFree, zipCode, location, images };
-      
-      // 2. CHANGED: Use API.post. The config object with the token is no longer needed here.
       await API.post('/api/listings', listingData);
-      
       setSuccess('Your listing has been published successfully!');
-      
-      // Clear the form fields
       setTitle(''); setDescription(''); setCategory(''); setCondition(''); setQuantity(''); setUnit(''); setPrice(''); setIsFree(false); setImages([]); setLocation('');
     } catch (err) {
       setError(err.response?.data?.message || err.message);
@@ -63,19 +52,7 @@ const CreateListingPage = () => {
           <h1 className="mb-1">Create New Listing</h1>
           <p className="text-muted mb-4">Share your surplus materials with the community.</p>
           {error && <Alert variant="danger" onClose={() => setError('')} dismissible>{error}</Alert>}
-          {success && (
-            <Alert variant="success" onClose={() => setSuccess('')} dismissible>
-              Your listing has been published successfully!
-              <hr />
-              <div className="d-flex justify-content-end">
-                <Link to="/dashboard">
-                  <Button variant="outline-success" size="sm">
-                    View Dashboard
-                  </Button>
-                </Link>
-              </div>
-            </Alert>
-          )}
+          {success && <Alert variant="success" onClose={() => setSuccess('')} dismissible>Your listing has been published successfully!<hr /><div className="d-flex justify-content-end"><Link to="/dashboard"><Button variant="outline-success" size="sm">View Dashboard</Button></Link></div></Alert>}
           <Form onSubmit={submitHandler}>
             <Card className="p-4 shadow-sm">
               <h4 className="mb-3">Listing Details</h4>
@@ -99,4 +76,5 @@ const CreateListingPage = () => {
   );
 };
 
-export default CreateListingPage;
+// Export name changed
+export default ListingCreatePage; 

@@ -52,7 +52,7 @@ const DashboardPage = () => {
         await API.delete(`/api/listings/${id}`);
         setSuccess('Listing deleted successfully!');
         fetchMyListings();
-      } catch (err) {
+      } catch (err) { // --- THE FIX IS HERE ---
         setError(err.response?.data?.message || err.message);
       }
     }
@@ -65,14 +65,11 @@ const DashboardPage = () => {
     <Container className="py-5">
       <Row className="align-items-center mb-4">
         <Col><h1>Dashboard</h1><p className="text-muted">Manage your listings and messages</p></Col>
-        <Col className="text-end"><Link to="/create-listing"><Button variant="orange" className="btn-orange">+ Create New Listing</Button></Link></Col>
+        <Col className="text-end"><Link to="/listings/new"><Button variant="orange" className="btn-orange">+ Create New Listing</Button></Link></Col>
       </Row>
       <Row className="mb-4">
         <Col md={4}><Card body className="text-center shadow-sm"><Card.Title>Active Listings</Card.Title><Card.Text className="fs-2 fw-bold">{activeListings.length}</Card.Text></Card></Col>
-        
-        {/* THIS IS THE CORRECTED LINE */}
         <Col md={4}><Card body className="text-center shadow-sm"><Card.Title>Sold Items</Card.Title><Card.Text className="fs-2 fw-bold">{soldListings.length}</Card.Text></Card></Col>
-        
         <Col md={4}><Card body className="text-center shadow-sm"><Card.Title>Messages</Card.Title><Card.Text className="fs-2 fw-bold">0</Card.Text></Card></Col>
       </Row>
       
@@ -85,7 +82,7 @@ const DashboardPage = () => {
         <Tabs defaultActiveKey="active" id="listings-tabs" className="mb-3" fill>
           <Tab eventKey="active" title={`Active Listings (${activeListings.length})`}>
             {activeListings.length === 0 ? (
-              <EmptyState icon={ListTask} title="You don't have any active listings yet." message="Ready to clear out some space? List your surplus materials now." buttonText="+ Create Your First Listing" buttonLink="/create-listing" />
+              <EmptyState icon={ListTask} title="You don't have any active listings yet." message="Ready to clear out some space? List your surplus materials now." buttonText="+ Create Your First Listing" buttonLink="/listings/new" />
             ) : (
               <div>
                 {activeListings.map(listing => (
