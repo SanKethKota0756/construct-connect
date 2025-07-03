@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { SearchProvider } from './context/SearchContext';
 import Layout from './components/Layout';
+
+// Import Main Pages
 import HomePage from './pages/HomePage';
 import SignUpPage from './pages/SignUpPage';
 import LoginPage from './pages/LoginPage';
@@ -15,7 +17,16 @@ import ListingEditPage from './pages/ListingEditPage';
 import ProfilePage from './pages/ProfilePage';
 import SearchPage from './pages/SearchPage';
 import UserProfilePage from './pages/UserProfilePage';
-import BrowsePage from './pages/BrowsePage'; // 1. Import the new page
+import BrowsePage from './pages/BrowsePage';
+
+// 1. Import all the new informational pages
+import AboutUsPage from './pages/info/AboutUsPage';
+import HowToBuyPage from './pages/info/HowToBuyPage';
+import SafetyTipsPage from './pages/info/SafetyTipsPage';
+import SellerGuidePage from './pages/info/SellerGuidePage';
+import PricingTipsPage from './pages/info/PricingTipsPage';
+import CareersPage from './pages/info/CareersPage';
+import ContactPage from './pages/info/ContactPage';
 
 import './App.css'; 
 
@@ -26,23 +37,30 @@ function App() {
         <SearchProvider>
           <Layout>
             <Routes>
-              {/* Public Routes */}
+              {/* Main App Routes */}
               <Route path="/" element={<HomePage />} />
-              <Route path="/signup" element={<SignUpPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/listing/:id" element={<ListingDetailPage />} />
               <Route path="/search" element={<SearchPage />} />
-              <Route path="/profile/:id" element={<UserProfilePage />} />
-              
-              {/* 2. Add the new routes for browsing */}
               <Route path="/browse" element={<BrowsePage />} />
               <Route path="/browse/page/:pageNumber" element={<BrowsePage />} />
-
+              <Route path="/listing/:id" element={<ListingDetailPage />} />
+              <Route path="/profile/:id" element={<UserProfilePage />} />
+              <Route path="/signup" element={<SignUpPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              
               {/* Private Routes */}
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/create-listing" element={<CreateListingPage />} />
               <Route path="/listing/:id/edit" element={<ListingEditPage />} />
               <Route path="/profile-settings" element={<ProfilePage />} />
+              
+              {/* 2. Add Routes for all the new static pages */}
+              <Route path="/about" element={<AboutUsPage />} />
+              <Route path="/how-to-buy" element={<HowToBuyPage />} />
+              <Route path="/safety-tips" element={<SafetyTipsPage />} />
+              <Route path="/seller-guide" element={<SellerGuidePage />} />
+              <Route path="/pricing-tips" element={<PricingTipsPage />} />
+              <Route path="/careers" element={<CareersPage />} />
+              <Route path="/contact" element={<ContactPage />} />
             </Routes>
           </Layout>
         </SearchProvider>

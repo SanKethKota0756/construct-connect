@@ -1,8 +1,8 @@
-// frontend/src/components/Footer.jsx - FULLY CORRECTED
+// frontend/src/components/Footer.jsx - FULLY UPDATED
 
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom'; // Import Link
+import { Link } from 'react-router-dom';
 import { WrenchAdjustable, Facebook, Twitter, Instagram } from 'react-bootstrap-icons';
 
 const Footer = () => {
@@ -20,33 +20,32 @@ const Footer = () => {
           </Col>
           <Col xs={6} md={3} lg={2} className="mb-4 footer-links">
             <h6 className="fw-bold text-uppercase">For Buyers</h6>
-            {/* Use the Link component for internal navigation */}
+            {/* --- UPDATE THESE LINKS --- */}
             <Link to="/search">Search Materials</Link>
             <Link to="/how-to-buy">How to Buy</Link>
             <Link to="/safety-tips">Safety Tips</Link>
           </Col>
           <Col xs={6} md={3} lg={2} className="mb-4 footer-links">
             <h6 className="fw-bold text-uppercase">For Sellers</h6>
+            {/* --- UPDATE THESE LINKS --- */}
             <Link to="/create-listing">Create Listing</Link>
             <Link to="/seller-guide">Seller Guide</Link>
             <Link to="/pricing-tips">Pricing Tips</Link>
           </Col>
           <Col xs={6} md={3} lg={2} className="mb-4 footer-links">
             <h6 className="fw-bold text-uppercase">Company</h6>
+            {/* --- UPDATE THESE LINKS --- */}
             <Link to="/about">About Us</Link>
             <Link to="/careers">Careers</Link>
             <Link to="/contact">Contact</Link>
           </Col>
         </Row>
-        
         <hr className="border-secondary" />
-
         <Row className="d-flex justify-content-between align-items-center text-white-50 small pt-3">
           <Col md={6} className="mb-3 mb-md-0 text-center text-md-start">
             <p className="mb-0">© {new Date().getFullYear()} ConstructConnect. All rights reserved.</p>
           </Col>
           <Col md={6} className="text-center text-md-end">
-            {/* For external links, using <a> is fine, but provide a placeholder URL */}
             <a href="https://facebook.com" className="social-icon text-white-50 me-3 fs-5"><Facebook /></a>
             <a href="https://twitter.com" className="social-icon text-white-50 me-3 fs-5"><Twitter /></a>
             <a href="https://instagram.com" className="social-icon text-white-50 fs-5"><Instagram /></a>
